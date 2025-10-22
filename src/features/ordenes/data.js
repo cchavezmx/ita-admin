@@ -1,0 +1,55 @@
+export const mockOrders = [
+  {
+    id: 'OC-2025-00123',
+    solicitante: 'ana@empresa.com',
+    proveedor: 'Acme SA de CV',
+    cc: 'CC-001 MKT',
+    concepto: 'Impresión flyers',
+    monto: 12500,
+    moneda: 'MXN',
+    estado: 'PENDIENTE',
+    fecha: '2025-10-21',
+  },
+  {
+    id: 'OC-2025-00124',
+    solicitante: 'luis@empresa.com',
+    proveedor: 'Logística XYZ',
+    cc: 'CC-014 OPS',
+    concepto: 'Flete CDMX-GDL',
+    monto: 58000,
+    moneda: 'MXN',
+    estado: 'RECHAZADA',
+    fecha: '2025-10-21',
+    rechazo: 'Excede presupuesto mensual del CC-014. Adjuntar cotización comparativa.',
+  },
+  {
+    id: 'OC-2025-00125',
+    solicitante: 'rocio@empresa.com',
+    proveedor: 'Software ABC',
+    cc: 'CC-009 IT',
+    concepto: 'Licencias anuales',
+    monto: 210000,
+    moneda: 'MXN',
+    estado: 'APROBADA',
+    fecha: '2025-10-20',
+  },
+  {
+    id: 'OC-2025-00126',
+    solicitante: 'ana@empresa.com',
+    proveedor: 'Servicios Creativos Alfa',
+    cc: 'CC-001 MKT',
+    concepto: 'Producción video campaña',
+    monto: 42000,
+    moneda: 'MXN',
+    estado: 'BORRADOR',
+    fecha: '2025-10-17',
+  },
+]
+
+export const mockChat = {
+  'OC-2025-00124': [
+    { who: 'approver', at: '2025-10-21 12:22', text: 'Hola, revisando la OC: falta comparativa de 3 proveedores.' },
+    { who: 'owner', at: '2025-10-21 12:30', text: 'Ok, subo cotizaciones. El flete es urgente.' },
+    { who: 'approver', at: '2025-10-21 13:00', text: 'Rechazo por ahora. Motivo: Excede presupuesto mensual del CC-014. Adjuntar cotización comparativa.' },
+  ],
+}
