@@ -5,10 +5,174 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
-import { Upload, Plus, X } from 'lucide-react'
+import { Plus, Upload, X } from 'lucide-react'
 import { mockOrders } from '@/features/ordenes/data'
+
+const TIPO_OC_OPTIONS = [
+  { value: '', label: 'Seleccione...' },
+  { value: '14', label: 'OBRA' },
+  { value: '2', label: 'PRODUCCION' },
+  { value: '1', label: 'CORPORATIVO' },
+  { value: '19', label: 'MANTENIMIENTO' },
+  { value: '9', label: 'IGLESIA' },
+  { value: '153', label: 'LOGISTICA' },
+  { value: '0', label: 'RENTA DE EQUIPO' },
+]
+
+const URGENTE_OPTIONS = [
+  { value: '', label: 'Seleccione...' },
+  { value: '1', label: 'PROGRAMADO' },
+  { value: '14', label: 'PAGADO' },
+  { value: '0', label: 'IMPORTANTE' },
+  { value: '11', label: 'Cancelada' },
+  { value: '2', label: 'URGENTE' },
+  { value: '5', label: '' },
+]
+
+const CONDICIONES_COMERCIALES_OPTIONS = [
+  { value: '', label: 'Seleccione...' },
+  { value: '1', label: 'CONTADO' },
+  { value: '9', label: 'REEMBOLSO' },
+  { value: '3', label: 'FINIQUITO' },
+  { value: '2', label: '8 DIAS' },
+  { value: '106', label: '14 DIAS' },
+  { value: '12', label: '15 DIAS' },
+  { value: '10', label: '20 DIAS' },
+  { value: '157', label: '26 DIAS' },
+  { value: '5', label: '28 DIAS' },
+  { value: '11', label: '30 DIAS' },
+  { value: '18', label: '45 DIAS' },
+  { value: '8', label: '60 DIAS' },
+  { value: '15', label: '120 DIAS' },
+  { value: '16', label: 'ANTICIPO 10%' },
+  { value: '4', label: 'ANTICPO 30%' },
+  { value: '7', label: 'ANTICIPO 50%' },
+  { value: '153', label: 'ANTICIPO 60%' },
+  { value: '0', label: 'ANTICIPO 65%' },
+  { value: '14', label: 'ANTICIPO 70%' },
+  { value: '108', label: 'TARJETA DE CREDITO' },
+  { value: '6', label: 'PAGO SEMESTRAL' },
+  { value: '13', label: 'PAGO MENSUAL' },
+  { value: '19', label: 'COMPRA EN LINEA' },
+  { value: '17', label: 'N/A' },
+]
+
+const EMPRESAS_OPTIONS = [
+  { value: '', label: 'Seleccione...' },
+  { value: '17', label: 'INSTALACIONES TECNOLOGICAS APLICADAS SA DE CV' },
+  { value: '2', label: 'INSTALACIONES Y TECNICA SA DE CV' },
+  { value: '12', label: 'CANALIZACION Y SOPORTERIA MEXICANA SA DE CV' },
+  { value: '9', label: 'INMOBILIARIA EGUEL SA DE CV' },
+  { value: '3', label: 'DEL TERCER DIA AC' },
+  { value: '6', label: 'LA IGLESIA DEL TERCER DIA AR' },
+  { value: '15', label: 'INMOBILIARIA DEL REINO LI3D SA DE CV' },
+  { value: '16', label: 'INMOBILIARIA BARRIO 18 SA DE CV' },
+  { value: '1', label: 'INDUSTRIAL CONNECT MEXICO S DE RL DE CV' },
+  { value: '0', label: 'MOVIMIENTO CONTINUO SA DE CV' },
+  { value: '19', label: 'SUIL & ODRAUDE SC' },
+  { value: '4', label: 'EDUARDO PADILLA URANGA' },
+  { value: '7', label: 'I' },
+]
+
+const CENTRO_COSTO_1_OPTIONS = [
+  { value: '', label: 'Seleccione...' },
+  { value: '11', label: 'CODITA' },
+  { value: '0', label: 'CODINTEC' },
+  { value: '157', label: 'CODINTEC SUR' },
+  { value: '6', label: 'CODEG' },
+  { value: '4', label: 'CODCAN' },
+  { value: '110', label: 'CODINDUSTRIAL' },
+  { value: '19', label: 'CANAL DE GARAY' },
+  { value: '7', label: 'CINEMEX GALERÍAS INSURGENTE' },
+  { value: '15', label: 'CINEMEX SATELITE PLAZA SAMARA' },
+  { value: '102', label: 'INMOBILIARIA DEL REINO' },
+  { value: '16', label: 'ITA-MEDIA TENSIÓN' },
+  { value: '108', label: 'ITA- BAJA TENSION' },
+  { value: '106', label: 'LERMA' },
+  { value: '154', label: 'ADCOAPA 4400053842 Suministros' },
+  { value: '1', label: 'ADCOAPA 4400053843 Mano De Obra' },
+  { value: '10', label: 'LIVERPOOL SANTA FE - REMOD PROVISIONAL' },
+  { value: '156', label: 'LIVERPOOL SANTA FE - INSTALACION' },
+  { value: '105', label: 'LIVERPOOL PLAN N5' },
+  { value: '151', label: 'MASSIMO DUTTI AGS CALIENTES' },
+  { value: '14', label: 'MASSIMO DUTTI AGUASCALIENTES' },
+  { value: '107', label: 'MASSIMO TIJUANA' },
+  { value: '17', label: 'MORAJEN CAFETALES' },
+  { value: '12', label: 'OYSHO TIJUANA' },
+  { value: '158', label: 'OYSHO PLAYA DEL CARMEN' },
+  { value: '9', label: 'PLAN CARCAMO' },
+  { value: '13', label: 'PLAN EDIFICACIONES' },
+  { value: '109', label: 'PLAN LIV MT ADJ.1' },
+  { value: '18', label: 'PLAN MOV DE LINEA' },
+  { value: '155', label: 'PLAN NODOS DE RED MAS 100 M NAVE 3' },
+  { value: '160', label: 'PLAN SISTEMA DE TIERRAS' },
+  { value: '103', label: 'PLAN LIVERPOOL SPTE POSTES PERIMETRAL' },
+  { value: '104', label: 'PALACIO DE HIERRO MITIKAH' },
+  { value: '3', label: 'PALACIO DE HIERRO SATELITE' },
+  { value: '8', label: 'PALACIO DE HIERRO INFANTILES SATELITE' },
+  { value: '101', label: 'PALACIO DE HIERRO LE BISTRO' },
+  { value: '159', label: 'PULL & BEAR OASIS COYOACAN' },
+  { value: '152', label: 'PULL&BEAR PARQUE DELTA' },
+  { value: '153', label: 'PULL & BEAR QUERETARO' },
+  { value: '2', label: 'SFERA SALTILLO' },
+  { value: '5', label: 'OTRO' },
+]
+
+const CENTRO_COSTO_2_OPTIONS = [
+  { value: '', label: 'Seleccione...' },
+  { value: '5', label: 'N/A' },
+  { value: '104', label: 'TOLTECAS' },
+  { value: '103', label: 'I3D' },
+  { value: '110', label: 'CHINT ENERGIXM' },
+  { value: '17', label: 'CHINT HOAXING' },
+  { value: '14', label: 'CHINT LIZHONG' },
+  { value: '18', label: 'CHINT LGMG' },
+  { value: '158', label: 'LULU LEMON' },
+  { value: '12', label: 'SPT POSTES PERIMETRALES' },
+  { value: '153', label: 'STRADIVARIUS SATELITE' },
+  { value: '154', label: 'STRADIVARIUS MTY' },
+  { value: '19', label: 'STRADIVARIUS ALM HUIXQUILUCAN' },
+  { value: '15', label: 'STRADIVARIUS ANTEA QRO' },
+  { value: '4', label: 'STRADIVARIUS PLAYA DEL CARMEN' },
+  { value: '6', label: 'STRADIVARIUS PLAZA DE LAS AMERICAS' },
+  { value: '7', label: 'STRADIVARIUS TIJUANA' },
+  { value: '152', label: 'ALMACEN PULL&BEAR OASIS COYOACAN' },
+  { value: '8', label: 'ALMACEN STRADIVARIUS HERMOSILLO' },
+  { value: '10', label: 'ALMACEN STRADIVARIUS HUIXQUILUCAN' },
+  { value: '3', label: 'ALMACEN ZARA HERMOSILLO' },
+  { value: '1', label: 'ALMACEN ZARA MORELIA' },
+  { value: '102', label: 'PLAN ALIMENTADORES AEREADORES BALSA' },
+  { value: '108', label: 'PLAN CABLEADO MT N5' },
+  { value: '16', label: 'PLAN CONTRATO 54' },
+  { value: '13', label: 'PULL & BEAR ANDARES GDL' },
+  { value: '0', label: 'LIVERPOOL QRO - COMEDOR' },
+  { value: '101', label: "SUBURBIA BANCOS" },
+  { value: '2', label: 'ZARA ALTARIA AGUASCALIENTES' },
+  { value: '159', label: "IDC'S SUMINISTRO CONTRATO 2" },
+  { value: '105', label: 'Liverpool Tezontle' },
+  { value: '155', label: 'PROTECSA CHAPALA' },
+  { value: '157', label: 'AMESA CHAPALA' },
+  { value: '151', label: 'PH Monterrey SAN PEDRO' },
+  { value: '109', label: 'PH Monterrey BUFFER' },
+  { value: '160', label: 'PH Monterrey MOV de INST  fase 3' },
+  { value: '9', label: '´PH Monterrey DOMO' },
+  { value: '106', label: 'IGLESIA' },
+  { value: '107', label: 'CAPACITACION DC3' },
+  { value: '11', label: 'MTI447 - CELDAS XBC' },
+  { value: '156', label: 'MTI PB2 PROTECSA' },
+]
+
+const MONEDA_OPTIONS = [
+  { value: '', label: 'Seleccione...' },
+  { value: '1', label: 'MXN' },
+  { value: '3', label: 'USD' },
+  { value: '4', label: 'EUR' },
+  { value: '0', label: 'LIBRA ESTERLINA' },
+]
+
+const selectClass =
+  'block w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900 disabled:cursor-not-allowed disabled:opacity-50'
 
 function FormNuevaOC() {
   const [resultMessage, setResultMessage] = useState('')
@@ -23,25 +187,28 @@ function FormNuevaOC() {
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
-      solicitante: '',
-      centroCosto: 'CC-001 MKT',
+      name: '',
+      text1: '',
+      status51: '',
       proveedor: '',
-      rfc: '',
-      concepto: '',
-      detalle: '',
+      status2: '',
+      long_text: '',
+      date5: '',
+      status6: '',
+      status54: '',
+      files: [],
       monto: '',
-      moneda: 'MXN',
-      impuesto: 'IVA16',
-      fechaRequerida: '',
-      proyecto: '',
-      adjuntos: [],
+      status0: '',
+      centro_de_costo: '',
+      color: '',
+      date9: '',
     },
   })
   const fileInputRef = useRef(null)
 
   const resetAttachments = () => {
-    setValue('adjuntos', [])
-    clearErrors('adjuntos')
+    setValue('files', [])
+    clearErrors('files')
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
@@ -68,152 +235,109 @@ function FormNuevaOC() {
           <Badge variant="outline" className="text-[11px]">Folio provisional al guardar</Badge>
         </CardHeader>
         <CardContent className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div>
-            <Label htmlFor="solicitante">Solicitante</Label>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="name">Name</Label>
             <Input
-              id="solicitante"
-              placeholder="tu@empresa.com"
-              autoComplete="email"
-              {...register('solicitante', {
-                required: 'Ingresa tu correo institucional',
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: 'Ingresa un correo válido',
-                },
-              })}
+              id="name"
+              placeholder="Nombre del solicitante"
+              {...register('name', { required: 'Ingresa el nombre del solicitante' })}
             />
-            {errors.solicitante && <p className="mt-1 text-xs text-red-600">{errors.solicitante.message}</p>}
+            {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name.message}</p>}
           </div>
-          <div>
-            <Label>Centro de costo</Label>
-            <Controller
-              name="centroCosto"
-              control={control}
-              rules={{ required: 'Selecciona un centro de costo' }}
-              render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecciona CC" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="CC-001 MKT">CC-001 MKT</SelectItem>
-                    <SelectItem value="CC-014 OPS">CC-014 OPS</SelectItem>
-                    <SelectItem value="CC-009 IT">CC-009 IT</SelectItem>
-                  </SelectContent>
-                </Select>
-              )}
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="text1">GESTOR DEL PULSO</Label>
+            <Input
+              id="text1"
+              placeholder="Nombre completo del gestor"
+              {...register('text1', { required: 'Ingresa el gestor del pulso' })}
             />
-            {errors.centroCosto && <p className="mt-1 text-xs text-red-600">{errors.centroCosto.message}</p>}
+            {errors.text1 && <p className="mt-1 text-xs text-red-600">{errors.text1.message}</p>}
           </div>
-          <div>
+          <div className="flex flex-col gap-1 md:col-span-2">
+            <Label htmlFor="status51">TIPO DE OC</Label>
+            <select
+              id="status51"
+              className={selectClass}
+              {...register('status51', { required: 'Selecciona el tipo de OC' })}
+            >
+              {TIPO_OC_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            {errors.status51 && <p className="mt-1 text-xs text-red-600">{errors.status51.message}</p>}
+          </div>
+          <div className="flex flex-col gap-1 md:col-span-2">
             <Label htmlFor="proveedor">Proveedor</Label>
-            <Input
+            <Textarea
               id="proveedor"
-              placeholder="Razón social"
-              {...register('proveedor', { required: 'Ingresa el proveedor' })}
+              rows={3}
+              placeholder="Coloca razón social y datos relevantes"
+              {...register('proveedor', { required: 'Ingresa la información del proveedor' })}
             />
             {errors.proveedor && <p className="mt-1 text-xs text-red-600">{errors.proveedor.message}</p>}
           </div>
-          <div>
-            <Label htmlFor="rfc">RFC proveedor (opcional)</Label>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="status2">URGENTE</Label>
+            <select
+              id="status2"
+              className={selectClass}
+              {...register('status2', { required: 'Selecciona el estatus de urgencia' })}
+            >
+              {URGENTE_OPTIONS.map((option) => (
+                <option key={`${option.value}-${option.label || 'blank'}`} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            {errors.status2 && <p className="mt-1 text-xs text-red-600">{errors.status2.message}</p>}
+          </div>
+          <div className="flex flex-col gap-1 md:col-span-2">
+            <Label htmlFor="long_text">OBSERVACIONES</Label>
+            <Textarea id="long_text" rows={4} {...register('long_text')} />
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="date5">FECHA ENTREGA OC</Label>
             <Input
-              id="rfc"
-              placeholder="XAXX010101000"
-              {...register('rfc', {
-                pattern: {
-                  value: /^([A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3})?$/,
-                  message: 'RFC no válido',
-                },
-              })}
-            />
-            {errors.rfc && <p className="mt-1 text-xs text-red-600">{errors.rfc.message}</p>}
-          </div>
-          <div className="md:col-span-2">
-            <Label htmlFor="concepto">Concepto</Label>
-            <Input
-              id="concepto"
-              placeholder="Describe brevemente la compra"
-              {...register('concepto', { required: 'Describe el concepto de la compra' })}
-            />
-            {errors.concepto && <p className="mt-1 text-xs text-red-600">{errors.concepto.message}</p>}
-          </div>
-          <div>
-            <Label htmlFor="detalle">Detalle</Label>
-            <Textarea
-              id="detalle"
-              rows={3}
-              placeholder="Especificaciones, cantidades, etc."
-              {...register('detalle')}
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label htmlFor="monto">Monto</Label>
-              <Input
-                id="monto"
-                type="number"
-                step="0.01"
-                placeholder="0.00"
-                {...register('monto', {
-                  required: 'Indica el monto estimado',
-                  min: { value: 1, message: 'El monto debe ser mayor a 0' },
-                })}
-              />
-              {errors.monto && <p className="mt-1 text-xs text-red-600">{errors.monto.message}</p>}
-            </div>
-            <div>
-              <Label>Moneda</Label>
-              <Controller
-                name="moneda"
-                control={control}
-                render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="MXN">MXN</SelectItem>
-                      <SelectItem value="USD">USD</SelectItem>
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </div>
-            <div className="col-span-2">
-              <Label>Impuesto</Label>
-              <Controller
-                name="impuesto"
-                control={control}
-                render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="IVA16">IVA 16%</SelectItem>
-                      <SelectItem value="IVA8">IVA 8%</SelectItem>
-                      <SelectItem value="EXENTO">Exento</SelectItem>
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </div>
-          </div>
-          <div>
-            <Label htmlFor="fechaRequerida">Fecha requerida</Label>
-            <Input
-              id="fechaRequerida"
+              id="date5"
               type="date"
-              {...register('fechaRequerida', { required: 'Selecciona la fecha requerida' })}
+              {...register('date5', { required: 'Selecciona la fecha de entrega de la OC' })}
             />
-            {errors.fechaRequerida && <p className="mt-1 text-xs text-red-600">{errors.fechaRequerida.message}</p>}
+            {errors.date5 && <p className="mt-1 text-xs text-red-600">{errors.date5.message}</p>}
           </div>
-          <div>
-            <Label htmlFor="proyecto">Proyecto (opcional)</Label>
-            <Input id="proyecto" placeholder="Nombre del proyecto" {...register('proyecto')} />
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="status6">CONDICIONES COMERCIALES</Label>
+            <select
+              id="status6"
+              className={selectClass}
+              {...register('status6', { required: 'Selecciona las condiciones comerciales' })}
+            >
+              {CONDICIONES_COMERCIALES_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            {errors.status6 && <p className="mt-1 text-xs text-red-600">{errors.status6.message}</p>}
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="status54">EMPRESAS</Label>
+            <select
+              id="status54"
+              className={selectClass}
+              {...register('status54', { required: 'Selecciona la empresa' })}
+            >
+              {EMPRESAS_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            {errors.status54 && <p className="mt-1 text-xs text-red-600">{errors.status54.message}</p>}
           </div>
           <Controller
-            name="adjuntos"
+            name="files"
             control={control}
             render={({ field: { value = [], onChange }, fieldState }) => {
               const processFiles = (fileList) => {
@@ -221,14 +345,15 @@ function FormNuevaOC() {
                 if (incoming.length === 0) return
                 const valid = incoming.filter((file) => file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf'))
                 if (valid.length === 0) {
-                  setError('adjuntos', { type: 'manual', message: 'Solo se admiten archivos PDF.' })
+                  setError('files', { type: 'manual', message: 'Solo se admiten archivos PDF.' })
                   return
                 }
                 if (valid.length < incoming.length) {
-                  setError('adjuntos', { type: 'manual', message: 'Se descartaron archivos que no son PDF.' })
+                  setError('files', { type: 'manual', message: 'Se descartaron archivos que no son PDF.' })
                 } else {
-                  clearErrors('adjuntos')
+                  clearErrors('files')
                 }
+
                 const map = new Map()
                 value.forEach((file, index) => {
                   map.set(`${file.name}-${file.size}-${index}`, file)
@@ -239,6 +364,7 @@ function FormNuevaOC() {
                     map.set(key, file)
                   }
                 })
+
                 const files = Array.from(map.values())
                 onChange(files)
                 if (fileInputRef.current) {
@@ -246,11 +372,11 @@ function FormNuevaOC() {
                 }
               }
 
-              const handleRemove = (idx) => {
-                const updated = value.filter((_, index) => index !== idx)
+              const handleRemove = (indexToRemove) => {
+                const updated = value.filter((_, index) => index !== indexToRemove)
                 onChange(updated)
                 if (updated.length === 0) {
-                  clearErrors('adjuntos')
+                  clearErrors('files')
                 }
               }
 
@@ -277,9 +403,10 @@ function FormNuevaOC() {
               }
 
               return (
-                <div className="md:col-span-2">
-                  <Label>Adjuntos (cotización, PDF)</Label>
+                <div className="md:col-span-2 flex flex-col gap-1">
+                  <Label htmlFor="files">REQ/COTIZACION</Label>
                   <div
+                    id="files"
                     className="mt-1 rounded-xl border border-dashed px-3 py-6 text-center text-sm text-neutral-500"
                     onDrop={onDrop}
                     onDragOver={onDragOver}
@@ -323,12 +450,75 @@ function FormNuevaOC() {
                       </ul>
                     )}
                   </div>
-                  <p className="mt-1 text-xs text-neutral-500">Los adjuntos se vincularán al enviar o guardar el borrador.</p>
-                  {fieldState.error && <p className="mt-2 text-xs text-red-600">{fieldState.error.message}</p>}
+                  <p className="text-xs text-neutral-500">Solo PDF. Se adjuntarán al enviar o guardar el borrador.</p>
+                  {fieldState.error && <p className="text-xs text-red-600">{fieldState.error.message}</p>}
                 </div>
               )
             }}
           />
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="monto">MONTO PESOS</Label>
+            <Input
+              id="monto"
+              type="number"
+              step="any"
+              placeholder="0.00"
+              {...register('monto', {
+                required: 'Ingresa el monto en pesos',
+                min: { value: 0, message: 'El monto debe ser mayor o igual a 0' },
+              })}
+            />
+            {errors.monto && <p className="mt-1 text-xs text-red-600">{errors.monto.message}</p>}
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="status0">MONEDA</Label>
+            <select
+              id="status0"
+              className={selectClass}
+              {...register('status0', { required: 'Selecciona la moneda' })}
+            >
+              {MONEDA_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            {errors.status0 && <p className="mt-1 text-xs text-red-600">{errors.status0.message}</p>}
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="centro_de_costo">CENTRO DE COSTO 1</Label>
+            <select
+              id="centro_de_costo"
+              className={selectClass}
+              {...register('centro_de_costo', { required: 'Selecciona el centro de costo principal' })}
+            >
+              {CENTRO_COSTO_1_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            {errors.centro_de_costo && <p className="mt-1 text-xs text-red-600">{errors.centro_de_costo.message}</p>}
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="color">CENTRO DE COSTO 2</Label>
+            <select id="color" className={selectClass} {...register('color')}>
+              {CENTRO_COSTO_2_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="date9">FECHA ESTIMADA DE PAGO</Label>
+            <Input
+              id="date9"
+              type="date"
+              {...register('date9', { required: 'Selecciona la fecha estimada de pago' })}
+            />
+            {errors.date9 && <p className="mt-1 text-xs text-red-600">{errors.date9.message}</p>}
+          </div>
           <div className="md:col-span-2 flex flex-col gap-2 pt-1 sm:flex-row sm:items-center sm:justify-end">
             <div className="flex-1 text-xs text-neutral-600 sm:text-right">
               {resultMessage && <span>{resultMessage}</span>}
