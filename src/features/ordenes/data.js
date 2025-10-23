@@ -9,6 +9,15 @@ export const mockOrders = [
     moneda: 'MXN',
     estado: 'PENDIENTE',
     fecha: '2025-10-21',
+    tipoOc: '1',
+    empresa: '17',
+    adjuntos: [
+      {
+        name: 'Cotizacion_Acme_OC-2025-00123.pdf',
+        size: 264000,
+        url: 'https://archivos.ita-admon.mock/OC-2025-00123/Cotizacion_Acme.pdf',
+      },
+    ],
   },
   {
     id: 'OC-2025-00124',
@@ -21,6 +30,20 @@ export const mockOrders = [
     estado: 'RECHAZADA',
     fecha: '2025-10-21',
     rechazo: 'Excede presupuesto mensual del CC-014. Adjuntar cotización comparativa.',
+    tipoOc: '153',
+    empresa: '2',
+    adjuntos: [
+      {
+        name: 'Comparativo_Logistica_GDL.pdf',
+        size: 512000,
+        url: 'https://archivos.ita-admon.mock/OC-2025-00124/Comparativo_Logistica.pdf',
+      },
+      {
+        name: 'OrdenUrgente_GDL.pdf',
+        size: 198000,
+        url: 'https://archivos.ita-admon.mock/OC-2025-00124/OrdenUrgente.pdf',
+      },
+    ],
   },
   {
     id: 'OC-2025-00125',
@@ -32,6 +55,9 @@ export const mockOrders = [
     moneda: 'MXN',
     estado: 'APROBADA',
     fecha: '2025-10-20',
+    tipoOc: '1',
+    empresa: '1',
+    adjuntos: [],
   },
   {
     id: 'OC-2025-00126',
@@ -43,6 +69,15 @@ export const mockOrders = [
     moneda: 'MXN',
     estado: 'BORRADOR',
     fecha: '2025-10-17',
+    tipoOc: '19',
+    empresa: '17',
+    adjuntos: [
+      {
+        name: 'Brief_Campaña.pdf',
+        size: 88000,
+        url: 'https://archivos.ita-admon.mock/OC-2025-00126/Brief_Campana.pdf',
+      },
+    ],
   },
 ]
 

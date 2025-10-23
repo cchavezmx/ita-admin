@@ -2,6 +2,7 @@ import { NavLink, Route, Routes, Navigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import Dhasbord from '@/pages/Dhasbord.jsx'
 import OrdenDeCompra from '@/pages/OrdenDeCompra.jsx'
+import AdminPanel from '@/pages/AdminPanel.jsx'
 
 const linkClass = ({ isActive }) =>
   cn(
@@ -22,6 +23,9 @@ export default function App() {
             <NavLink to="/orden-de-compra" className={linkClass}>
               Orden de compra
             </NavLink>
+            <NavLink to="/admin" className={linkClass}>
+              Admin
+            </NavLink>
           </nav>
         </div>
       </header>
@@ -30,6 +34,7 @@ export default function App() {
         <Route path="/" element={<Navigate to="/dhasbord" replace />} />
         <Route path="/dhasbord" element={<Dhasbord />} />
         <Route path="/orden-de-compra" element={<OrdenDeCompra />} />
+        <Route path="/admin" element={<AdminPanel />} />
         <Route path="*" element={<Navigate to="/dhasbord" replace />} />
       </Routes>
     </div>

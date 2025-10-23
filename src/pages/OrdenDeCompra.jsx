@@ -8,17 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { Plus, Upload, X } from 'lucide-react'
 import { mockOrders } from '@/features/ordenes/data'
-
-const TIPO_OC_OPTIONS = [
-  { value: '', label: 'Seleccione...' },
-  { value: '14', label: 'OBRA' },
-  { value: '2', label: 'PRODUCCION' },
-  { value: '1', label: 'CORPORATIVO' },
-  { value: '19', label: 'MANTENIMIENTO' },
-  { value: '9', label: 'IGLESIA' },
-  { value: '153', label: 'LOGISTICA' },
-  { value: '0', label: 'RENTA DE EQUIPO' },
-]
+import { useCatalogos } from '@/features/catalogos/context'
 
 const URGENTE_OPTIONS = [
   { value: '', label: 'Seleccione...' },
@@ -56,23 +46,6 @@ const CONDICIONES_COMERCIALES_OPTIONS = [
   { value: '13', label: 'PAGO MENSUAL' },
   { value: '19', label: 'COMPRA EN LINEA' },
   { value: '17', label: 'N/A' },
-]
-
-const EMPRESAS_OPTIONS = [
-  { value: '', label: 'Seleccione...' },
-  { value: '17', label: 'INSTALACIONES TECNOLOGICAS APLICADAS SA DE CV' },
-  { value: '2', label: 'INSTALACIONES Y TECNICA SA DE CV' },
-  { value: '12', label: 'CANALIZACION Y SOPORTERIA MEXICANA SA DE CV' },
-  { value: '9', label: 'INMOBILIARIA EGUEL SA DE CV' },
-  { value: '3', label: 'DEL TERCER DIA AC' },
-  { value: '6', label: 'LA IGLESIA DEL TERCER DIA AR' },
-  { value: '15', label: 'INMOBILIARIA DEL REINO LI3D SA DE CV' },
-  { value: '16', label: 'INMOBILIARIA BARRIO 18 SA DE CV' },
-  { value: '1', label: 'INDUSTRIAL CONNECT MEXICO S DE RL DE CV' },
-  { value: '0', label: 'MOVIMIENTO CONTINUO SA DE CV' },
-  { value: '19', label: 'SUIL & ODRAUDE SC' },
-  { value: '4', label: 'EDUARDO PADILLA URANGA' },
-  { value: '7', label: 'I' },
 ]
 
 const CENTRO_COSTO_1_OPTIONS = [
@@ -176,6 +149,7 @@ const selectClass =
 
 function FormNuevaOC() {
   const [resultMessage, setResultMessage] = useState('')
+  const { tiposOc, empresas } = useCatalogos()
   const {
     register,
     handleSubmit,
@@ -260,7 +234,7 @@ function FormNuevaOC() {
               className={selectClass}
               {...register('status51', { required: 'Selecciona el tipo de OC' })}
             >
-              {TIPO_OC_OPTIONS.map((option) => (
+              {tiposOc.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
@@ -328,7 +302,7 @@ function FormNuevaOC() {
               className={selectClass}
               {...register('status54', { required: 'Selecciona la empresa' })}
             >
-              {EMPRESAS_OPTIONS.map((option) => (
+              {empresas.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
