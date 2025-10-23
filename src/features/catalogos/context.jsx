@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { DEFAULT_EMPRESAS, DEFAULT_TIPOS_OC } from './data'
+import { DEFAULT_EMPRESAS, DEFAULT_TIPOS_OC, DEFAULT_CENTROS_COSTO } from './data'
 
 const CatalogosContext = createContext(null)
 
@@ -14,6 +14,7 @@ const loadFromStorage = () => {
       return {
         tiposOc: Array.isArray(parsed.tiposOc) ? parsed.tiposOc : undefined,
         empresas: Array.isArray(parsed.empresas) ? parsed.empresas : undefined,
+        centrosCosto: Array.isArray(parsed.centrosCosto) ? parsed.centrosCosto : undefined,
       }
     }
   } catch (error) {
@@ -33,18 +34,20 @@ const persistToStorage = (payload) => {
 export function CatalogosProvider({ children }) {
   const [tiposOc, setTiposOc] = useState(DEFAULT_TIPOS_OC)
   const [empresas, setEmpresas] = useState(DEFAULT_EMPRESAS)
+  const [centrosCosto, setCentrosCosto] = useState(DEFAULT_CENTROS_COSTO)
 
   useEffect(() => {
     if (typeof window === 'undefined') return
     const saved = loadFromStorage()
     if (saved?.tiposOc) setTiposOc(saved.tiposOc)
     if (saved?.empresas) setEmpresas(saved.empresas)
+    if (saved?.centrosCosto) setCentrosCosto(saved.centrosCosto)
   }, [])
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    persistToStorage({ tiposOc, empresas })
-  }, [tiposOc, empresas])
+    persistToStorage({ tiposOc, empresas, centrosCosto })
+  }, [tiposOc, empresas, centrosCosto])
 
   const addTipoOc = (entry) => {
     setTiposOc((prev) => {
@@ -66,9 +69,19 @@ export function CatalogosProvider({ children }) {
     })
   }
 
+  const addCentroCosto = (entry) => {
+    setCentrosCosto((prev) => {
+      const exists = prev.some((item) => item.value === entry.value)
+      if (exists) {
+        return prev.map((item) => (item.value === entry.value ? entry : item))
+      }
+      return [...prev, entry]
+    })
+  }
+
   const value = useMemo(
-    () => ({ tiposOc, empresas, addTipoOc, addEmpresa }),
-    [tiposOc, empresas]
+    () => ({ tiposOc, empresas, centrosCosto, addTipoOc, addEmpresa, addCentroCosto }),
+    [tiposOc, empresas, centrosCosto]
   )
 
   return <CatalogosContext.Provider value={value}>{children}</CatalogosContext.Provider>
@@ -81,4 +94,3 @@ export const useCatalogos = () => {
   }
   return context
 }
-

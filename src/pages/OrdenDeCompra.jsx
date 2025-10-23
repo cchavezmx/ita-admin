@@ -48,50 +48,6 @@ const CONDICIONES_COMERCIALES_OPTIONS = [
   { value: '17', label: 'N/A' },
 ]
 
-const CENTRO_COSTO_1_OPTIONS = [
-  { value: '', label: 'Seleccione...' },
-  { value: '11', label: 'CODITA' },
-  { value: '0', label: 'CODINTEC' },
-  { value: '157', label: 'CODINTEC SUR' },
-  { value: '6', label: 'CODEG' },
-  { value: '4', label: 'CODCAN' },
-  { value: '110', label: 'CODINDUSTRIAL' },
-  { value: '19', label: 'CANAL DE GARAY' },
-  { value: '7', label: 'CINEMEX GALERÍAS INSURGENTE' },
-  { value: '15', label: 'CINEMEX SATELITE PLAZA SAMARA' },
-  { value: '102', label: 'INMOBILIARIA DEL REINO' },
-  { value: '16', label: 'ITA-MEDIA TENSIÓN' },
-  { value: '108', label: 'ITA- BAJA TENSION' },
-  { value: '106', label: 'LERMA' },
-  { value: '154', label: 'ADCOAPA 4400053842 Suministros' },
-  { value: '1', label: 'ADCOAPA 4400053843 Mano De Obra' },
-  { value: '10', label: 'LIVERPOOL SANTA FE - REMOD PROVISIONAL' },
-  { value: '156', label: 'LIVERPOOL SANTA FE - INSTALACION' },
-  { value: '105', label: 'LIVERPOOL PLAN N5' },
-  { value: '151', label: 'MASSIMO DUTTI AGS CALIENTES' },
-  { value: '14', label: 'MASSIMO DUTTI AGUASCALIENTES' },
-  { value: '107', label: 'MASSIMO TIJUANA' },
-  { value: '17', label: 'MORAJEN CAFETALES' },
-  { value: '12', label: 'OYSHO TIJUANA' },
-  { value: '158', label: 'OYSHO PLAYA DEL CARMEN' },
-  { value: '9', label: 'PLAN CARCAMO' },
-  { value: '13', label: 'PLAN EDIFICACIONES' },
-  { value: '109', label: 'PLAN LIV MT ADJ.1' },
-  { value: '18', label: 'PLAN MOV DE LINEA' },
-  { value: '155', label: 'PLAN NODOS DE RED MAS 100 M NAVE 3' },
-  { value: '160', label: 'PLAN SISTEMA DE TIERRAS' },
-  { value: '103', label: 'PLAN LIVERPOOL SPTE POSTES PERIMETRAL' },
-  { value: '104', label: 'PALACIO DE HIERRO MITIKAH' },
-  { value: '3', label: 'PALACIO DE HIERRO SATELITE' },
-  { value: '8', label: 'PALACIO DE HIERRO INFANTILES SATELITE' },
-  { value: '101', label: 'PALACIO DE HIERRO LE BISTRO' },
-  { value: '159', label: 'PULL & BEAR OASIS COYOACAN' },
-  { value: '152', label: 'PULL&BEAR PARQUE DELTA' },
-  { value: '153', label: 'PULL & BEAR QUERETARO' },
-  { value: '2', label: 'SFERA SALTILLO' },
-  { value: '5', label: 'OTRO' },
-]
-
 const CENTRO_COSTO_2_OPTIONS = [
   { value: '', label: 'Seleccione...' },
   { value: '5', label: 'N/A' },
@@ -149,7 +105,7 @@ const selectClass =
 
 function FormNuevaOC() {
   const [resultMessage, setResultMessage] = useState('')
-  const { tiposOc, empresas } = useCatalogos()
+  const { tiposOc, empresas, centrosCosto } = useCatalogos()
   const {
     register,
     handleSubmit,
@@ -466,7 +422,7 @@ function FormNuevaOC() {
               className={selectClass}
               {...register('centro_de_costo', { required: 'Selecciona el centro de costo principal' })}
             >
-              {CENTRO_COSTO_1_OPTIONS.map((option) => (
+              {centrosCosto.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>

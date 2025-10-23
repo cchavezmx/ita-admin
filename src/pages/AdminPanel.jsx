@@ -11,6 +11,8 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { MessageSquare, Plus, Download } from 'lucide-react'
 import { useCatalogos } from '@/features/catalogos/context'
 import { mockChat, mockOrders } from '@/features/ordenes/data'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 const ESTADOS = ['TODOS', 'PENDIENTE', 'EN_APROBACION', 'APROBADA', 'RECHAZADA', 'BORRADOR']
 
@@ -167,10 +169,12 @@ function ChatAdministrador({ oc, mensajes, onSend }) {
   )
 }
 
-function CatalogoManager({ titulo, onAdd, items, emptyLabel }) {
+function CatalogoManager({ titulo, onAdd, items, emptyLabel, selectPlaceholder = 'Selecciona una opción' }) {
   const [label, setLabel] = useState('')
   const [value, setValue] = useState('')
   const [message, setMessage] = useState('')
+  const [tab, setTab] = useState('lista')
+  const [selected, setSelected] = useState('')
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -184,56 +188,91 @@ function CatalogoManager({ titulo, onAdd, items, emptyLabel }) {
     setLabel('')
     setValue('')
     setMessage('Opción registrada. Ya está disponible en los formularios.')
+    setTab('lista')
   }
+
+  const listado = items.filter((item) => item.value)
 
   return (
     <Card>
       <CardHeader>
         <CardTitle className="text-base font-semibold">{titulo}</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <form onSubmit={handleSubmit} className="grid gap-3 md:grid-cols-2">
-          <div className="flex flex-col gap-1">
-            <Label htmlFor={`${titulo}-valor`}>Clave / ID</Label>
-            <Input
-              id={`${titulo}-valor`}
-              placeholder="Ej. 21"
-              value={value}
-              onChange={(event) => setValue(event.target.value)}
-            />
-          </div>
-          <div className="flex flex-col gap-1 md:col-span-2">
-            <Label htmlFor={`${titulo}-texto`}>Descripción visible</Label>
-            <Input
-              id={`${titulo}-texto`}
-              placeholder={emptyLabel}
-              value={label}
-              onChange={(event) => setLabel(event.target.value)}
-            />
-          </div>
-          <div className="md:col-span-2 flex justify-end">
-            <Button type="submit" className="bg-neutral-900 text-white">
-              <Plus className="mr-1 h-4 w-4" /> Agregar
-            </Button>
-          </div>
-        </form>
-        {message && <p className="text-sm text-neutral-600">{message}</p>}
-        <div className="flex flex-wrap gap-2 text-xs">
-          {items
-            .filter((item) => item.value)
-            .map((item) => (
-              <Badge key={`${item.value}-${item.label}`} variant="outline">
-                {item.value} · {item.label}
-              </Badge>
-            ))}
-        </div>
+      <CardContent>
+        <Tabs value={tab} onValueChange={setTab} className="space-y-4">
+          <TabsList>
+            <TabsTrigger value="lista">Lista</TabsTrigger>
+            <TabsTrigger value="nuevo">Agregar</TabsTrigger>
+          </TabsList>
+          <TabsContent value="lista" className="space-y-4">
+            <div className="space-y-1">
+              <Label>Opciones registradas</Label>
+              <Select value={selected || undefined} onValueChange={setSelected}>
+                <SelectTrigger>
+                  <SelectValue placeholder={selectPlaceholder} />
+                </SelectTrigger>
+                <SelectContent className="max-h-60">
+                  {listado.length === 0 && <SelectItem value="__empty" disabled>No hay opciones</SelectItem>}
+                  {listado.map((item) => (
+                    <SelectItem key={`${item.value}-${item.label}`} value={item.value}>
+                      {item.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="max-h-56 overflow-auto rounded-lg border bg-neutral-50">
+              <ul className="divide-y divide-neutral-200 text-sm">
+                {listado.map((item) => (
+                  <li key={`${item.value}-${item.label}`} className="flex items-center justify-between px-3 py-2">
+                    <span className="font-medium text-neutral-800">{item.label}</span>
+                    <Badge variant="outline" className="text-xs">
+                      {item.value}
+                    </Badge>
+                  </li>
+                ))}
+                {listado.length === 0 && (
+                  <li className="px-3 py-4 text-center text-neutral-500">No hay registros disponibles.</li>
+                )}
+              </ul>
+            </div>
+          </TabsContent>
+          <TabsContent value="nuevo" className="space-y-4">
+            <form onSubmit={handleSubmit} className="grid gap-3 md:grid-cols-2">
+              <div className="flex flex-col gap-1">
+                <Label htmlFor={`${titulo}-valor`}>Clave / ID</Label>
+                <Input
+                  id={`${titulo}-valor`}
+                  placeholder="Ej. 21"
+                  value={value}
+                  onChange={(event) => setValue(event.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-1 md:col-span-2">
+                <Label htmlFor={`${titulo}-texto`}>Descripción visible</Label>
+                <Input
+                  id={`${titulo}-texto`}
+                  placeholder={emptyLabel}
+                  value={label}
+                  onChange={(event) => setLabel(event.target.value)}
+                />
+              </div>
+              <div className="md:col-span-2 flex justify-end">
+                <Button type="submit" className="bg-neutral-900 text-white">
+                  <Plus className="mr-1 h-4 w-4" /> Guardar opción
+                </Button>
+              </div>
+            </form>
+            {message && <p className="text-sm text-neutral-600">{message}</p>}
+          </TabsContent>
+        </Tabs>
       </CardContent>
     </Card>
   )
 }
 
 export default function AdminPanel() {
-  const { tiposOc, empresas, addTipoOc, addEmpresa } = useCatalogos()
+  const { tiposOc, empresas, centrosCosto, addTipoOc, addEmpresa, addCentroCosto } = useCatalogos()
   const [orders] = useState(mockOrders)
   const [messages, setMessages] = useState(mockChat)
   const [query, setQuery] = useState('')
@@ -414,18 +453,27 @@ export default function AdminPanel() {
           </CardContent>
         </Card>
 
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-3">
           <CatalogoManager
             titulo="Tipos de OC"
             items={tiposOc}
             onAdd={addTipoOc}
             emptyLabel="Ej. SERVICIOS ESPECIALES"
+            selectPlaceholder="Selecciona un tipo"
           />
           <CatalogoManager
             titulo="Empresas"
             items={empresas}
             onAdd={addEmpresa}
             emptyLabel="Nombre de la empresa"
+            selectPlaceholder="Selecciona una empresa"
+          />
+          <CatalogoManager
+            titulo="Centros de costo"
+            items={centrosCosto}
+            onAdd={addCentroCosto}
+            emptyLabel="Nombre del centro"
+            selectPlaceholder="Selecciona un centro"
           />
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { NavLink, Route, Routes, Navigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
-import Dhasbord from '@/pages/Dhasbord.jsx'
+import Dashboard from '@/pages/Dashboard.jsx'
 import OrdenDeCompra from '@/pages/OrdenDeCompra.jsx'
 import AdminPanel from '@/pages/AdminPanel.jsx'
 
@@ -17,7 +17,7 @@ export default function App() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
           <span className="text-lg font-semibold text-neutral-900">ITA Admin</span>
           <nav className="flex items-center gap-2">
-            <NavLink to="/dhasbord" className={linkClass}>
+            <NavLink to="/" end className={linkClass}>
               Inicio
             </NavLink>
             <NavLink to="/orden-de-compra" className={linkClass}>
@@ -31,11 +31,10 @@ export default function App() {
       </header>
 
       <Routes>
-        <Route path="/" element={<Navigate to="/dhasbord" replace />} />
-        <Route path="/dhasbord" element={<Dhasbord />} />
+        <Route path="/" element={<Dashboard />} />
         <Route path="/orden-de-compra" element={<OrdenDeCompra />} />
         <Route path="/admin" element={<AdminPanel />} />
-        <Route path="*" element={<Navigate to="/dhasbord" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   )
